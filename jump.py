@@ -40,12 +40,12 @@ class Base(object):
         """
 
         if self.point_start:
-            print(f"ends at {(event.x,event.y)}")
+            print("ends at {%f, %f}" % (event.x,event.y))
 
             distance = math.sqrt(
                 (event.x - self.point_start[0]) ** 2 +
                 (event.y - self.point_start[1]) ** 2)
-            print(f'distance {distance}')
+            print('distance %f' % (distance))
             self.press_screen(int(distance * CONFIG.ratioRelative * 3))
             time.sleep(1.2)
 
@@ -53,9 +53,9 @@ class Base(object):
             self.refresh()
         else:
             self.point_start = (event.x, event.y)
-            print(f"starts at {self.point_start}")
+            print("starts at " + str(self.point_start))
 
-    def press_screen(self, t: int):
+    def press_screen(self, t):
         raise NotImplemented
 
     def refresh(self):
@@ -83,8 +83,8 @@ class Jump(Base):
 
     def refresh(self):
         # 保证能从MIUI系统中读到关键信息
-        while not os.system(f"{self.adb} shell screencap -p /sdcard/screenshot.png"):
-            if os.system(f"{self.adb} pull /sdcard/screenshot.png {self.path_img}"):
+        while not os.system(str(self.adb) + " shell screencap -p /sdcard/screenshot.png"):
+            if os.system(str(self.adb) + " pull /sdcard/screenshot.png " + str(self.path_img)):
                 print('稍后重试')
                 time.sleep(0.3)
             else:
@@ -166,10 +166,10 @@ class Jump(Base):
     def __parse_stop_point(self):
         raise NotImplementedError
 
-    def press_screen(self, t: int):
+    def press_screen(self, t):
         p = ' '.join([str(random.choice(range(512, 1024))) for _ in range(4)])
 
-        os.system(f"{self.adb} shell input touchscreen swipe {p} {t}")
+        os.system(str(self.adb)+ " shell input touchscreen swipe " + p + ' ' + str(t))
 
 
 # for p in [
