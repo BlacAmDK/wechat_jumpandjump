@@ -52,8 +52,8 @@ class Base(object):
             self.point_start = ()
             self.refresh()
         else:
-            point_start = (event.x, event.y)
-            print(f"starts at {point_start}")
+            self.point_start = (event.x, event.y)
+            print(f"starts at {self.point_start}")
 
     def press_screen(self, t: int):
         raise NotImplemented
